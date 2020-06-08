@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Edward's smart home</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.5.0/nouislider.min.css">
+  <style>
+    .container {
+      padding: 5px;
+    }
+
+    .row {
+      margin-right: 0;
+    }
+
+    .card-body {
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    .input-group {
+      text-align: center;
+    }
+
+    .navbar-light h3 {
+      margin-top: 0.5rem !important;
+    }
+
+    .navbar-light p {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .col,
+    .col-1,
+    .col-10,
+    .col-11,
+    .col-12,
+    .col-2,
+    .col-3,
+    .col-4,
+    .col-5,
+    .col-6,
+    .col-7,
+    .col-8,
+    .col-9,
+    .col-auto,
+    .col-lg,
+    .col-lg-1,
+    .col-lg-10,
+    .col-lg-11,
+    .col-lg-12,
+    .col-lg-2,
+    .col-lg-3,
+    .col-lg-4,
+    .col-lg-5,
+    .col-lg-6,
+    .col-lg-7,
+    .col-lg-8,
+    .col-lg-9,
+    .col-lg-auto,
+    .col-md,
+    .col-md-1,
+    .col-md-10,
+    .col-md-11,
+    .col-md-12,
+    .col-md-2,
+    .col-md-3,
+    .col-md-4,
+    .col-md-5,
+    .col-md-6,
+    .col-md-7,
+    .col-md-8,
+    .col-md-9,
+    .col-md-auto,
+    .col-sm,
+    .col-sm-1,
+    .col-sm-10,
+    .col-sm-11,
+    .col-sm-12,
+    .col-sm-2,
+    .col-sm-3,
+    .col-sm-4,
+    .col-sm-5,
+    .col-sm-6,
+    .col-sm-7,
+    .col-sm-8,
+    .col-sm-9,
+    .col-sm-auto,
+    .col-xl,
+    .col-xl-1,
+    .col-xl-10,
+    .col-xl-11,
+    .col-xl-12,
+    .col-xl-2,
+    .col-xl-3,
+    .col-xl-4,
+    .col-xl-5,
+    .col-xl-6,
+    .col-xl-7,
+    .col-xl-8,
+    .col-xl-9,
+    .col-xl-auto {
+      padding-right: 0;
+    }
+
+    .footer {
+      position: relative;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+    }
+
+    #temperature-block {
+      display: none;
+    }
+
+    #humidity-block {
+      display: none;
+    }
+
+    #service-block {
+      display: none;
+    }
+
+    .slider {
+      margin-top: 50px;
+      margin-bottom: 40px;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .container h6 {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="index.html">Edward's smart home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse animate__animated animate__fadeInLeft" id="navbarNavDropdown">
+        <div class="navbar-nav">
+          <button type="button" class="btn btn-dark" id="basic-information-btn"><i class="fas fa-tachometer-alt"></i>
+            Basic information</button>
+          <button type="button" class="btn btn-dark" id="temperature-btn"><i class="fas fa-temperature-low"></i>
+            Temperatures</button>
+          <button type="button" class="btn btn-dark" id="humidity-btn"><i class="fas fa-tint"></i> Humidities</button>
+          <button type="button" class="btn btn-dark" id="service-btn"><i class="fas fa-tools"></i> Service
+            section</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="animate__animated animate__fadeInUpBig" id="basic-information-block">
+      <nav class="navbar navbar-light bg-light">
+        <h3 class="mt-4">Basic information</h3>
+        <p>Data updated at <span id="localTime"></span></p>
+      </nav>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-temperature-low"></i>Temperatures</div>
+            <div class="card-body"><canvas id="temperatureBar" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-tint"></i>Humidities</div>
+            <div class="card-body"><canvas id="humidityBar" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-text text-white" id="devicesState">Devices' state</span>
+          </nav>
+          <div class="container">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3">
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="heaterOne">
+                  <div class="card-body">
+                    <h6 class="card-title">heater 1</h6>
+                    <p class="card-text" id="heaterOneConsumption"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="heaterTwo">
+                  <div class="card-body">
+                    <h6 class="card-title">heater 2</h6>
+                    <p class="card-text" id="heaterTwoConsumption"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="toiletFan">
+                  <div class="card-body">
+                    <h6 class="card-title">toilet fan</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="bathroomFan">
+                  <div class="card-body">
+                    <h6 class="card-title">bathroom fan</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="gasFiredBoiler">
+                  <div class="card-body">
+                    <h6 class="card-title">gas-fired boiler</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-text text-white" id="radiatorsState">Radiators' state</span>
+          </nav>
+          <div class="container">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3">
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="childroomRadiator">
+                  <div class="card-body">
+                    <h6 class="card-title">childroom</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="kitchenRadiator">
+                  <div class="card-body">
+                    <h6 class="card-title">kitchen</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="bedroomRadiator">
+                  <div class="card-body">
+                    <h6 class="card-title">bedroom</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="toiletRadiator">
+                  <div class="card-body">
+                    <h6 class="card-title">toilet</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 text-white" id="bathroomRadiator">
+                  <div class="card-body">
+                    <h6 class="card-title">bathroom</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="animate__animated animate__fadeInUpBig" id="temperature-block">
+      <nav class="navbar navbar-light bg-light">
+        <h3 class="mt-4">Temperatures</h3>
+      </nav>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="container">
+            <h6>Temperature values range</h6>
+            <div class="slider" id="temperatureRange"></div>
+            <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3">
+              <div class="container">
+                <div class="col mb-2">
+                  <div class="card h-100 bg-warning">
+                    <button type="button" class="btn btn-warning" id="setTemperatureRange">set</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="container">
+            <h6>Shown period in range</h6>
+            <div class="slider" id="temperaturePeriod"></div>
+            <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3">
+              <div class="container">
+                <div class="col mb-2">
+                  <div class="card h-100 bg-warning">
+                    <button type="button" class="btn btn-warning" id="showTemperaturePeriod">show</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-chart-area mr-1"></i>Kitchen temperature</div>
+            <div class="card-body"><canvas id="kitchenTemperature" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-chart-area mr-1"></i>Bathroom temperature</div>
+            <div class="card-body"><canvas id="bathroomTemperature" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-chart-area mr-1"></i>Electric boiler
+              temperature</div>
+            <div class="card-body"><canvas id="electricBoilerTemperature" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-chart-area mr-1"></i>Outdoor temperature</div>
+            <div class="card-body"><canvas id="outdoorTemperature" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="animate__animated animate__fadeInUpBig" id="humidity-block">
+      <nav class="navbar navbar-light bg-light">
+        <h3 class="mt-4">Humidities</h3>
+      </nav>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="container">
+            <h6>Humidity values range</h6>
+            <div class="slider" id="humidityRange"></div>
+            <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3">
+              <div class="container">
+                <div class="col mb-2">
+                  <div class="card h-100 bg-warning">
+                    <button type="button" class="btn btn-warning" id="setHumidityRange">set</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="container">
+            <h6>Shown period in range</h6>
+            <div class="slider" id="humidityPeriod"></div>
+            <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3">
+              <div class="container">
+                <div class="col mb-2">
+                  <div class="card h-100 bg-warning">
+                    <button type="button" class="btn btn-warning" id="showHumidityPeriod">show</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-chart-area mr-1"></i>Kitchen humidity</div>
+            <div class="card-body"><canvas id="kitchenHumidity" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <div class="card mb-4">
+            <div class="card-header bg-dark text-white"><i class="fas fa-chart-area mr-1"></i>Bathroom humidity</div>
+            <div class="card-body"><canvas id="bathroomHumidity" width="100%" height="60"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="animate__animated animate__fadeInUpBig" id="service-block">
+      <nav class="navbar navbar-light bg-light">
+        <h3 class="mt-4">Service section</h3>
+        <p>Time was synchronized at <span id="timeSynchronized"></span></p>
+      </nav>
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-text text-white" id="boilerSetup">Electric boiler setup</span>
+          </nav>
+          <div class="container">
+            <h6>Mode</h6>
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3">
+              <div class="col mb-2">
+                <div class="card h-100 bg-secondary text-white">
+                  <button type="button" class="btn btn-secondary" id="switchedOn">switched on</button>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 bg-secondary text-white">
+                  <button type="button" class="btn btn-secondary" id="automatic">automatic</button>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 bg-secondary text-white">
+                  <button type="button" class="btn btn-secondary" id="switchedOff">switched off</button>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <h6>Day target temperature</h6>
+              <div class="slider" id="day-target-temperature"></div>
+              <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3">
+                <div class="container">
+                  <div class="col mb-2">
+                    <div class="card h-100 bg-warning">
+                      <button type="button" class="btn btn-warning" id="setDayTemperature">set</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <h6>Evening target temperature</h6>
+              <div class="slider" id="evening-target-temperature"></div>
+              <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3">
+                <div class="container">
+                  <div class="col mb-2">
+                    <div class="card h-100 bg-warning">
+                      <button type="button" class="btn btn-warning" id="setEveningTemperature">set</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <h6>Working periods setup</h6>
+              <div class="slider" id="boiler-working-periods"></div>
+              <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3">
+                <div class="container">
+                  <div class="col mb-2">
+                    <div class="card h-100 bg-warning">
+                      <button type="button" class="btn btn-warning" id="setWorkingPeriods">set</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <div class="col mb-2">
+                <div class="card h-100 bg-warning">
+                  <button type="button" class="btn btn-warning" id="reset">reset all sliders</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6">
+          <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-text text-white" id="resetSection">Controllers' reset</span>
+          </nav>
+          <div class="container">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3">
+              <div class="col mb-2">
+                <div class="card h-100 bg-warning">
+                  <button type="button" class="btn btn-warning" id="softResetMega">soft reset Mega</button>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 bg-warning">
+                  <button type="button" class="btn btn-warning" id="softResetESP">soft reset ESP</button>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 bg-warning">
+                  <button type="button" class="btn btn-warning" id="hardResetMega">hard reset Mega</button>
+                </div>
+              </div>
+              <div class="col mb-2">
+                <div class="card h-100 bg-warning">
+                  <button type="button" class="btn btn-warning" id="hardResetESP">hard reset ESP</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="text-muted">Design and development by Eduard Luchuk &copy; 2020</div>
+    </nav>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.5.0/nouislider.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
+  <script>
+    "use strict";
+    Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = "#292b2c";
+    Chart.plugins.unregister(ChartDataLabels);
+    const espUrl = "http://192.168.0.5";
+    const espData = {};
+    const thingTemperatureData = {};
+    const thingHumidityData = {};
+
+    const currentValuesChartData = {};
+    const tepmeratureChartData = {};
+    const humidityChartData = {};
+
+    const currentValuesChart = {};
+    const temperatureChart = {};
+    const humidityChart = {};
+
+    function fetchData(method, url, body = null) {
+      const headers = { "Content-Type": "application/json", };
+      const parameters = { method: method, headers: headers, };
+      if (method === "POST") parameters.body = JSON.stringify(body);
+      return fetch(url, parameters).then(response => response.json()).catch(err => console.error(err));
+    }
+
+    function generatePipsPositions(min, max, step, multiplier) {
+      const pipsArray = [0, 100];
+      const rangeStep = Math.floor((max - min) / step / multiplier) * step * 100 / (max - min);
+      let pipsPosition = rangeStep;
+      while (pipsPosition < 100) {
+        pipsArray.push(pipsPosition);
+        pipsPosition += rangeStep;
+      }
+      return pipsArray;
+    }
+
+    function SliderParameters(connect, tooltips, step, start, multiplier, min, max) {
+      this.connect = connect;
+      this.tooltips = tooltips;
+      this.step = step;
+      this.start = start;
+      this.pips = {
+        mode: "positions",
+        values: generatePipsPositions(min, max, step, multiplier),
+        density: 100,
+        format: wNumb({ decimals: 0 })
+      };
+      this.range = {
+        "min": min,
+        "max": max
+      };
+    }
+
+    const dayTemperatureParameters = new SliderParameters("lower", wNumb({ decimals: 0 }), 1, 30, 6, 30, 60);
+    const eveningTemperatureParameters = new SliderParameters("lower", wNumb({ decimals: 0 }), 1, 30, 6, 30, 60);
+    const workingPeriodsParameters = new SliderParameters([false, true, true, false], [wNumb({ decimals: 0 }), wNumb({ decimals: 0 }), wNumb({ decimals: 0 })], 1, [0, 0, 0], 6, 0, 24);
+    const temperatureRangeParameters = new SliderParameters("lower", wNumb({ decimals: 0 }), 10, 40, 4, 40, 300);
+    const temperaturePeriodParameters = new SliderParameters([false, true, false], [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })], 10, [0, 40], 4, 0, 40);
+    const humidityRangeParameters = new SliderParameters("lower", wNumb({ decimals: 0 }), 10, 40, 4, 40, 300);
+    const humidityPeriodParameters = new SliderParameters([false, true, false], [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })], 10, [0, 40], 4, 0, 40);
+
+    const dayTemperatureSlider = document.querySelector("#day-target-temperature");
+    const eveningTemperatureSlider = document.querySelector("#evening-target-temperature");
+    const workingPeriodsSlider = document.querySelector("#boiler-working-periods");
+    const temperatureRangeSlider = document.querySelector("#temperatureRange");
+    const temperaturePeriodSlider = document.querySelector("#temperaturePeriod");
+    const humidityRangeSlider = document.querySelector("#humidityRange");
+    const humidityPeriodSlider = document.querySelector("#humidityPeriod");
+
+    noUiSlider.create(dayTemperatureSlider, dayTemperatureParameters);
+    noUiSlider.create(eveningTemperatureSlider, eveningTemperatureParameters);
+    noUiSlider.create(workingPeriodsSlider, workingPeriodsParameters);
+    noUiSlider.create(temperatureRangeSlider, temperatureRangeParameters);
+    noUiSlider.create(temperaturePeriodSlider, temperaturePeriodParameters);
+    noUiSlider.create(humidityRangeSlider, humidityRangeParameters);
+    noUiSlider.create(humidityPeriodSlider, humidityPeriodParameters);
+
+    const temperatureRange = {
+      start: temperaturePeriodParameters.start[0],
+      end: temperaturePeriodParameters.start[1]
+    };
+
+    const humidityRange = {
+      start: humidityPeriodParameters.start[0],
+      end: humidityPeriodParameters.start[1]
+    };
+
+    class ThingChannel {
+      constructor(channel, apiKey, valuesNumber) {
+        this.channel = channel;
+        this.apiKey = apiKey;
+        this.valuesNumber = valuesNumber
+      }
+
+      get url() {
+        return `https://api.thingspeak.com/channels/${this.channel}/feeds.json?api_key=${this.apiKey}&results=${this.valuesNumber}`;
+      }
+    }
+
+    const temperatureChannel = new ThingChannel(999999/*thing speak channel*/, "QWERTY"/*code*/, Number(temperatureRangeSlider.noUiSlider.get()));
+    const humidityChannel = new ThingChannel(999999/*thing speak channel*/, "QWERTY"/*code*/, Number(humidityRangeSlider.noUiSlider.get()));
+
+    const timeShift = 3;
+
+    class BarChart {
+      constructor(id, units, maxValue, dataObj) {
+        this.ctx = document.querySelector(`#${id}`);
+        this.units = units;
+        this.maxValue = maxValue;
+        this.dataObj = dataObj;
+      }
+
+      buildBarChart() {
+        return new Chart(this.ctx, {
+          plugins: [ChartDataLabels],
+          type: "bar",
+          data: {
+            labels: espDataToChart(this.dataObj, "labels"),
+            datasets: [{ label: this.units, backgroundColor: "rgba(2,117,216,1)", borderColor: "rgba(2,117,216,1)", data: espDataToChart(this.dataObj, "data") }],
+          },
+          options: {
+            scales: {
+              xAxes: [{ time: { unit: "spot" }, gridLines: { display: false }, ticks: { maxTicksLimit: 6 } }],
+              yAxes: [{ ticks: { min: 0, max: this.maxValue, maxTicksLimit: 5 }, gridLines: { display: true } }],
+            },
+            legend: { display: false },
+            plugins: {
+              datalabels: { color: "#fff" }
+            }
+          },
+        });
+      }
+    }
+
+    function espDataToChart(dataObj, dataType) {
+      const arr = [];
+      for (let key in dataObj) {
+        arr.push(dataType === "labels" ? key : dataType === "data" ? dataObj[key] : "error");
+      }
+      return arr;
+    }
+
+    function updateBarCharts() {
+      for (let category in currentValuesChart) {
+        const labels = espDataToChart(espData[category], "labels");
+        const data = espDataToChart(espData[category], "data");
+        currentValuesChart[category].data.labels = labels;
+        currentValuesChart[category].data.datasets[0].data = data;
+        currentValuesChart[category].update();
+      };
+    }
+
+    class LineChart {
+      constructor(id, field, maxValue, rangeType, dataArray) {
+        this.ctx = document.querySelector(`#${id}`);
+        this.field = field;
+        this.maxValue = maxValue;
+        this.dataArray = dataArray;
+        this.rangeType = rangeType;
+      }
+
+      buildLineChart() {
+        return new Chart(this.ctx, {
+          type: "line",
+          data: {
+            labels: thingDataToChart(this.dataArray, this.rangeType, "created_at", timeShift),
+            datasets: [{
+              label: null,
+              lineTension: 0.3,
+              backgroundColor: "rgba(2,117,216,0.2)",
+              borderColor: "rgba(2,117,216,1)",
+              pointRadius: 5,
+              pointBackgroundColor: "rgba(2,117,216,1)",
+              pointBorderColor: "rgba(255,255,255,0.8)",
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: "rgba(2,117,216,1)",
+              pointHitRadius: 50,
+              pointBorderWidth: 2,
+              data: thingDataToChart(this.dataArray, this.rangeType, this.field),
+            }],
+          },
+          options: {
+            scales: {
+              xAxes: [{
+                time: { unit: "time" }, gridLines: { display: false }, ticks: { maxTicksLimit: 7 }
+              }],
+              yAxes: [{
+                ticks: { min: 0, max: this.maxValue, maxTicksLimit: 5 },
+                gridLines: { color: "rgba(0, 0, 0, .125)", }
+              }],
+            },
+            legend: { display: false }
+          }
+        });
+      }
+    }
+
+    function thingDataToChart(dataType, rangeType, category, timeShift = null) {
+      let field;
+      switch (category) {
+        case "kitchen": field = "field1";
+          break;
+        case "bathroom": field = "field2";
+          break;
+        case "electricBoiler": field = "field3";
+          break;
+        case "outdoor": field = "field4";
+          break;
+        default: field = category;
+      }
+      const selectedTemperatureData = dataType.feeds.slice(rangeType.start, rangeType.end);
+      const dataToChart = [];
+      selectedTemperatureData.forEach(item => dataToChart.push(field === "created_at" ? item[field]
+        .slice(11, 16)
+        .split(":")
+        .map((item, index) => index === 0 ?
+          (+item + timeShift - 24) >= 0 ?
+            (+item + timeShift - 24) : (+item + timeShift) :
+          item)
+        .join(":") : item[field]));
+      return dataToChart;
+    }
+
+    function updateLineCharts(dataType, chartType, rangeType) {
+      const labels = thingDataToChart(dataType, rangeType, "created_at", timeShift);
+      for (let category in chartType) {
+        const data = thingDataToChart(dataType, rangeType, category);
+        chartType[category].data.labels = labels;
+        chartType[category].data.datasets[0].data = data;
+        chartType[category].update();
+      };
+    }
+
+    function generateUrl(basis, request) {
+      return basis + "/password/request/" + request;
+    }
+
+    function getData(generatedUrl, dataType) {
+      return fetchData("GET", generatedUrl)
+        .then(data => Object.assign(dataType, data));
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      getData(generateUrl(espUrl, "getData"), espData).then(() => {
+        currentValuesChartData.temperature = new BarChart("temperatureBar", "degree", 60, espData.temperature);
+        currentValuesChartData.humidity = new BarChart("humidityBar", "percent", 100, espData.humidity);
+        currentValuesChart.temperature = currentValuesChartData.temperature.buildBarChart();
+        currentValuesChart.humidity = currentValuesChartData.humidity.buildBarChart();
+        toggleButton(espData.electricBoilerState);
+        setSliders();
+        insertCurrentValues(espData);
+      });
+      getData(temperatureChannel.url, thingTemperatureData).then(() => {
+        tepmeratureChartData.kitchen = new LineChart("kitchenTemperature", "kitchen", 30, temperatureRange, thingTemperatureData);
+        tepmeratureChartData.bathroom = new LineChart("bathroomTemperature", "bathroom", 30, temperatureRange, thingTemperatureData);
+        tepmeratureChartData.electricBoiler = new LineChart("electricBoilerTemperature", "electricBoiler", 70, temperatureRange, thingTemperatureData);
+        tepmeratureChartData.outdoor = new LineChart("outdoorTemperature", "outdoor", 40, temperatureRange, thingTemperatureData);
+        temperatureChart.kitchen = tepmeratureChartData.kitchen.buildLineChart();
+        temperatureChart.bathroom = tepmeratureChartData.bathroom.buildLineChart();
+        temperatureChart.electricBoiler = tepmeratureChartData.electricBoiler.buildLineChart();
+        temperatureChart.outdoor = tepmeratureChartData.outdoor.buildLineChart();
+      });
+      getData(humidityChannel.url, thingHumidityData).then(() => {
+        humidityChartData.kitchen = new LineChart("kitchenHumidity", "kitchen", 100, humidityRange, thingHumidityData);
+        humidityChartData.bathroom = new LineChart("bathroomHumidity", "bathroom", 100, humidityRange, thingHumidityData);
+        humidityChart.kitchen = humidityChartData.kitchen.buildLineChart();
+        humidityChart.bathroom = humidityChartData.bathroom.buildLineChart();
+      })
+    });
+
+    document.querySelector("#setTemperatureRange").addEventListener("click", () => {
+      const rangeValue = Number(temperatureRangeSlider.noUiSlider.get());
+      temperaturePeriodSlider.noUiSlider.updateOptions({
+        range: {
+          "min": 0,
+          "max": rangeValue
+        },
+        start: [0, rangeValue],
+        pips: {
+          mode: "positions",
+          values: generatePipsPositions(0, rangeValue, 10, 4),
+          density: 100
+        }
+      });
+      temperatureChannel.valuesNumber = rangeValue;
+      getData(temperatureChannel.url, thingTemperatureData);
+    });
+
+    document.querySelector("#showTemperaturePeriod").addEventListener("click", () => {
+      temperatureRange.start = Number(temperaturePeriodSlider.noUiSlider.get()[0]);
+      temperatureRange.end = Number(temperaturePeriodSlider.noUiSlider.get()[1]);
+      updateLineCharts(thingTemperatureData, temperatureChart, temperatureRange);
+    });
+
+    document.querySelector("#setHumidityRange").addEventListener("click", () => {
+      const rangeValue = Number(humidityRangeSlider.noUiSlider.get());
+      humidityPeriodSlider.noUiSlider.updateOptions({
+        range: {
+          "min": 0,
+          "max": rangeValue
+        },
+        start: [0, rangeValue],
+        pips: {
+          mode: "positions",
+          values: generatePipsPositions(0, rangeValue, 10, 4),
+          density: 100
+        }
+      });
+      humidityChannel.valuesNumber = rangeValue;
+      getData(humidityChannel.url, thingHumidityData);
+    });
+
+    document.querySelector("#showHumidityPeriod").addEventListener("click", () => {
+      humidityRange.start = Number(humidityPeriodSlider.noUiSlider.get()[0]);
+      humidityRange.end = Number(humidityPeriodSlider.noUiSlider.get()[1]);
+      updateLineCharts(thingHumidityData, humidityChart, humidityRange);
+    });
+
+    function toggleButton(context) {
+      ["switchedOn", "automatic", "switchedOff"]
+        .forEach(id => document.querySelector(`#${id}`)
+          .setAttribute("class", `btn btn-${id === context ? "danger" : "secondary"}`));
+    }
+
+    function setSliders() {
+      dayTemperatureSlider.noUiSlider.set(espData.targetTemperature.day);
+      eveningTemperatureSlider.noUiSlider.set(espData.targetTemperature.evening);
+      workingPeriodsSlider.noUiSlider.set(espData.boilerWorkingPeriods);
+    }
+
+    setInterval(() => getData(generateUrl(espUrl, "getData"), espData)
+      .then(() => {
+        updateBarCharts();
+        insertCurrentValues(espData);
+      }), 60000);
+
+    setInterval(() => {
+      getData(temperatureChannel.url, thingTemperatureData)
+        .then(() => updateLineCharts(thingTemperatureData, temperatureChart, temperatureRange));
+      getData(humidityChannel.url, thingHumidityData)
+        .then(() => updateLineCharts(thingHumidityData, humidityChart, humidityRange));
+    }, 1200000);
+
+    function setBadgeType(id, value) {
+      document.querySelector(`#${id}`).setAttribute("class", `card h-100 bg-${value ? "danger" : "secondary"} text-white`);
+    }
+
+    function insertCurrentValues(data) {
+      document.querySelector("#timeSynchronized").innerHTML = data.timeSynchronized;
+      document.querySelector("#localTime").innerHTML = data.localTime;
+      setBadgeType("heaterOne", data.isDeviceOn.heaterOne);
+      setBadgeType("heaterTwo", data.isDeviceOn.heaterTwo);
+      setBadgeType("toiletFan", data.isDeviceOn.toiletFan);
+      setBadgeType("bathroomFan", data.isDeviceOn.bathroomFan);
+      setBadgeType("gasFiredBoiler", data.isDeviceOn.gasFiredBoiler);
+      setBadgeType("childroomRadiator", data.isValveOpen.childroom);
+      setBadgeType("kitchenRadiator", data.isValveOpen.kitchen);
+      setBadgeType("bedroomRadiator", data.isValveOpen.bedroom);
+      setBadgeType("bathroomRadiator", data.isValveOpen.bathroom);
+      setBadgeType("toiletRadiator", data.isValveOpen.toilet);
+      document.querySelector("#heaterOneConsumption").innerHTML = `${data.heaterPowerConsumption.heaterOne} kW`;
+      document.querySelector("#heaterTwoConsumption").innerHTML = `${data.heaterPowerConsumption.heaterTwo} kW`;
+    }
+
+    function sendRequest(phrase, request) {
+      if (confirm(phrase)) {
+        return fetchData("GET", generateUrl(espUrl, request)).then(data => alert(data.response));
+      }
+    }
+
+    document.querySelector("#softResetMega").addEventListener("click", () => sendRequest("You are going to soft reset Mega!", "SoftResetMega"));
+    document.querySelector("#softResetESP").addEventListener("click", () => sendRequest("You are going to soft reset ESP!", "SoftResetESP"));
+    document.querySelector("#hardResetMega").addEventListener("click", () => sendRequest("You are going to hard reset Mega!", "HardResetMega"));
+    document.querySelector("#hardResetESP").addEventListener("click", () => sendRequest("You are going to hard reset ESP!", "HardResetESP"));
+
+    document.querySelector("#switchedOn").addEventListener("click", () => sendRequest("Are you sure you want to set the boiler mode?", "switchedOn")
+      .then(() => toggleButton("switchedOn")));
+    document.querySelector("#automatic").addEventListener("click", () => sendRequest("Are you sure you want to set the boiler mode?", "automatic")
+      .then(() => toggleButton("automatic")));
+    document.querySelector("#switchedOff").addEventListener("click", () => sendRequest("Are you sure you want to set the boiler mode?", "switchedOff")
+      .then(() => toggleButton("switchedOff")));
+
+    function sendSliderValue(sliderName, requestPhrase) {
+      const requestString = requestPhrase + sliderName.noUiSlider.get();
+      sendRequest("Are you sure you want to set value?", requestString);
+    }
+
+    document.querySelector("#setDayTemperature").addEventListener("click", () => sendSliderValue(dayTemperatureSlider, "setDayTemperature"));
+    document.querySelector("#setEveningTemperature").addEventListener("click", () => sendSliderValue(eveningTemperatureSlider, "setEveningTemperature"));
+    document.querySelector("#setWorkingPeriods").addEventListener("click", () => sendSliderValue(workingPeriodsSlider, "setWorkingPeriods"));
+    document.querySelector("#reset").addEventListener("click", setSliders);
+
+    function toggleBlockDisplay(context) {
+      ["basic-information-block", "temperature-block", "humidity-block", "service-block"]
+        .forEach(id => document.querySelector(`#${id}`).style.display = id === context ? "block" : "none");
+    }
+
+    document.querySelector("#basic-information-btn").addEventListener("click", () => toggleBlockDisplay("basic-information-block"));
+    document.querySelector("#temperature-btn").addEventListener("click", () => toggleBlockDisplay("temperature-block"));
+    document.querySelector("#humidity-btn").addEventListener("click", () => toggleBlockDisplay("humidity-block"));
+    document.querySelector("#service-btn").addEventListener("click", () => toggleBlockDisplay("service-block"));
+  </script>
+</body>
+
+</html>
