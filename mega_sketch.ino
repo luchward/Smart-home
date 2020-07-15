@@ -360,19 +360,19 @@ void loop() {
     }
 
     switch(boilerState) {
-      case 1: {
+      case 1:
         isDeviceOn[0] = false;
         isDeviceOn[1] = false;
         digitalWrite(LED_PIN, LOW);
-      }
-      break;
-      case 3: {
+        break;
+      
+      case 3:
         isDeviceOn[0] = true;
         isDeviceOn[1] = true;
         digitalWrite(LED_PIN, HIGH);
-      }
-      break;
-      default: {
+        break;
+      
+      default:
         if (boilerSwitchOnTime <= hour && hour < boilerToggleTime) {
           Serial.println(String F("It's day. Boiler has been switched on!"));
           coilSelect(targetTemperature[0], hour);
@@ -384,7 +384,6 @@ void loop() {
           isDeviceOn[0] = false;
           isDeviceOn[1] = false;
         }
-      }
     }
 
     dataToESP = "";
